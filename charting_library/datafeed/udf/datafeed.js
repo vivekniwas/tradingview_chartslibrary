@@ -454,17 +454,17 @@ Datafeeds.SymbolsStorage.prototype._requestFullSymbolsList = function() {
 		this._datafeed._send(this._datafeed._datafeedURL + '/symbol_info', {
 			group: exchange
 		})
-			.done(function(exchange) {
+			.done((function(exchange) {
 				return function(response) {
 					that._onExchangeDataReceived(exchange, JSON.parse(response));
 					that._onAnyExchangeResponseReceived(exchange);
 				};
-			})(exchange)
-			.fail(function(exchange) {
+			})(exchange))
+			.fail((function(exchange) {
 				return function(reason) {
 					that._onAnyExchangeResponseReceived(exchange);
 				};
-			})(exchange);
+			})(exchange));
 	}
 };
 
