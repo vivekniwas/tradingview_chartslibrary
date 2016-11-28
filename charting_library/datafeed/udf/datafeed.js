@@ -821,3 +821,9 @@ Datafeeds.QuotesPulseUpdater.prototype._updateQuotes = function(symbolsGetter) {
 			});
 	}
 };
+
+if (typeof module !== 'undefined' && module && module.exports) {
+	module.exports = {
+		UDFCompatibleDatafeed: Datafeeds.UDFCompatibleDatafeed,
+	};
+}
