@@ -215,6 +215,8 @@ Datafeeds.UDFCompatibleDatafeed.prototype.searchSymbols = function(searchString,
 					if (!data[i].params) {
 						data[i].params = [];
 					}
+
+					data[i].exchange = data[i].exchange || '';
 				}
 
 				if (typeof data.s == 'undefined' || data.s !== 'error') {
