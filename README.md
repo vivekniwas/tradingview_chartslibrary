@@ -1,7 +1,7 @@
 # TradingView Charting Library
 
 
-This repository contains Charting Library package. If you use Git in your project, please feel free to this repo as a submodule to your one. 
+This repository contains Charting Library package. If you use Git in your project, please feel free to use this repo as a submodule to your one. 
 
 `master` branch contains current stable version. 
 
