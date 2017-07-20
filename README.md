@@ -1,7 +1,11 @@
 # TradingView Charting Library
 
 
-This repository contains Charting Library package. If you use Git in your project, please feel free to this repo as a submodule to your one. `master` branch contains current stable version. `unstable` branch contains the most recent features and fixes, but it's less stable.
+This repository contains Charting Library package. If you use Git in your project, please feel free to this repo as a submodule to your one. 
+
+`master` branch contains current stable version. 
+
+`unstable` branch contains the most recent features and fixes, but it can be less stable (actually, it is beta which is already thourghly tested).
 
 ### Documentation
 See our docs @ this repository's [wiki](https://github.com/tradingview/charting_library/wiki). Please read it (at least, [Overview](https://github.com/tradingview/charting_library/wiki) and [Best Practices](https://github.com/tradingview/charting_library/wiki/Best-practices)) before running the Library.
