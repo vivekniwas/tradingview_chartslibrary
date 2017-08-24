@@ -47,7 +47,10 @@ Datafeeds.UDFCompatibleDatafeed.prototype.getServerTime = function(callback) {
 	if (this._configuration.supports_time) {
 		this._send(this._datafeedURL + '/time', {})
 			.done(function(response) {
-				callback(+response);
+				var time = +response;
+				if (!isNaN(time)) {
+					callback(time);
+				}
 			})
 			.fail(function() {
 			});
@@ -356,19 +359,19 @@ Datafeeds.UDFCompatibleDatafeed.prototype.getBars = function(symbolInfo, resolut
 		for (var i = 0; i < barsCount; ++i) {
 			var barValue = {
 				time: data.t[i] * 1000,
-				close: data.c[i]
+				close: +data.c[i]
 			};
 
 			if (ohlPresent) {
-				barValue.open = data.o[i];
-				barValue.high = data.h[i];
-				barValue.low = data.l[i];
+				barValue.open = +data.o[i];
+				barValue.high = +data.h[i];
+				barValue.low = +data.l[i];
 			} else {
-				barValue.open = barValue.high = barValue.low = barValue.close;
+				barValue.open = barValue.high = barValue.low = +barValue.close;
 			}
 
 			if (volumePresent) {
-				barValue.volume = data.v[i];
+				barValue.volume = +data.v[i];
 			}
 
 			bars.push(barValue);
@@ -523,7 +526,6 @@ Datafeeds.SymbolsStorage.prototype._onExchangeDataReceived = function(exchangeNa
 				force_session_rebuild: tableField(data, 'force-session-rebuild', symbolIndex) || false,
 				has_daily: tableField(data, 'has-daily', symbolIndex) || true,
 				intraday_multipliers: tableField(data, 'intraday-multipliers', symbolIndex) || ['1', '5', '15', '30', '60'],
-				has_fractional_volume: tableField(data, 'has-fractional-volume', symbolIndex) || false,
 				has_weekly_and_monthly: tableField(data, 'has-weekly-and-monthly', symbolIndex) || false,
 				has_empty_bars: tableField(data, 'has-empty-bars', symbolIndex) || false,
 				volume_precision: tableField(data, 'volume-precision', symbolIndex) || 0
