@@ -8,12 +8,9 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
-		<!-- jQuery is not required to use Charting Library. It is used only for sample datafeed ajax requests. -->
-		<script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-		<script>window.jQuery || document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"><\/script>')</script>
 		<script type="text/javascript" src="charting_library/charting_library.min.js"></script>
-		<script type="text/javascript" src="charting_library/datafeed/udf/datafeed.js"></script>
-
+		<script type="text/javascript" src="datafeeds/udf/dist/polyfills.js"></script>
+		<script type="text/javascript" src="datafeeds/udf/dist/bundle.js"></script>
 
 		<script type="text/javascript">
 
@@ -33,7 +30,8 @@
                 var udf_datafeed = new Datafeeds.UDFCompatibleDatafeed("https://demo_feed.tradingview.com");
 
 				var widget = window.tvWidget = new TradingView.widget({
-                    fullscreen: true,
+					// debug: true, // uncomment this line to see Library errors and warnings in the console
+					fullscreen: true,
 					symbol: 'AAPL',
 					interval: 'D',
 					toolbar_bg: '#f4f7f9',
@@ -112,7 +110,7 @@
 								alert('Saved');
 							})
 						 })
-						.append($('<span>save</span>'));
+						.append('<span>save</span>');
 
 					widget.createButton()
 						.attr('title', "Load chart")
@@ -121,35 +119,35 @@
 								widget.load(savedWidgetContent);
 							}
 						 })
-						.append($('<span>load</span>'));
+						.append('<span>load</span>');
 
 					widget.createButton()
 						.attr('title', "Load chart")
 						.on('click', function (e) {
 							widget.load(referenceChart);
 						 })
-						.append($('<span>load reference</span>'));
+						.append('<span>load reference</span>');
 
 					widget.createButton()
 						.attr('title', "Load chart")
 						.on('click', function (e) {
 							widget.load(referenceChart2);
 						 })
-						.append($('<span>load reference 2</span>'));
+						.append('<span>load reference 2</span>');
 
 
 
 					widget.createButton()
 						.on('click', function (e) {
-							savedTemplate = widget.createStudyTemplate({saveInterval: false});
+							savedTemplate = widget.activeChart().createStudyTemplate({saveInterval: false});
 						 })
-						.append($('<span>save template (-i)</span>'));
+						.append('<span>save template (-i)</span>');
 
 					widget.createButton()
 						.on('click', function (e) {
-							savedTemplate = widget.createStudyTemplate({saveInterval: true});
+							savedTemplate = widget.activeChart().createStudyTemplate({saveInterval: true});
 						 })
-						.append($('<span>save template (+i)</span>'));
+						.append('<span>save template (+i)</span>');
 
 					widget.createButton()
 						.on('click', function (e) {
@@ -157,7 +155,7 @@
 								widget.chart().applyStudyTemplate(savedTemplate);
 							}
 						 })
-						.append($('<span>apply template</span>'));
+						.append('<span>apply template</span>');
 
 
 
@@ -165,14 +163,14 @@
 						.on('click', function (e) {
 							widget.setSymbol("F", '2D');
 						 })
-						.append($('<span>F, 2D</span>'));
+						.append('<span>F, 2D</span>');
 
 
 					widget.createButton()
 						.on('click', function (e) {
 							widget.chart().clearMarks();
 						 })
-						.append($('<span>Clear marks</span>'));
+						.append('<span>Clear marks</span>');
 
 					widget.createButton()
 						.attr('title', "Add item")
@@ -185,7 +183,7 @@
 								}
 							);
 						 })
-						.append($('<span>+BB</span>'));
+						.append('<span>+BB</span>');
 
 					widget.createButton({align: "right"})
 						.attr('title', "Add item")
@@ -197,7 +195,7 @@
 								}
 							);
 						 })
-						.append($('<span>+MA</span>'));
+						.append('<span>+MA</span>');
 
 						widget.createButton({align: "right"})
 						.attr('title', "Add item")
@@ -210,40 +208,36 @@
 								{"plot.color.0" : "#FF0000"}
 							);
 						 })
-						.append($('<span>+MA++</span>'));
+						.append('<span>+MA++</span>');
 
 					widget.createButton({align: "right"})
 						.attr('title', "Add item")
 						.on('click', function (e) {
 							widget.chart().createStudy('Stochastic', false, false, [12, 3, 3], null, {"%d.color" : "#000000", "%k.color" : "#00FF00"});
 						 })
-						.append($('<span>+Stoch</span>'));
+						.append('<span>+Stoch</span>');
 
 
 					widget.createButton()
 						.on('click', function (e) {
 							widget.chart().createOrderLine();
 						 })
-						.append($('<span>new order</span>'));
+						.append('<span>new order</span>');
 
 					widget.createButton()
 						.on('click', function (e) {
 							widget.chart().removeAllStudies();
 						 })
-						.append($('<span>rm all studies</span>'));
+						.append('<span>rm all studies</span>');
 
 					widget.createButton()
 						.on('click', function (e) {
 							widget.chart().removeAllShapes();
 						 })
-						.append($('<span>rm all shapes</span>'));
+						.append('<span>rm all shapes</span>');
 
 					widget.onGrayedObjectClicked(function(x) {
 						alert("You are not permitted to use " + x.name + "(" + x.type + ")");
-					});
-
-					widget.subscribe('onIntervalChange', function(x) {
-						console.log("onIntervalChange: " + x);
 					});
 
                     widget.onShortcut("alt+s", function() {
@@ -257,13 +251,13 @@
 								to: Date.UTC(2013, 3, 3) / 1000
 							});
 						 })
-						.append($('<span>set view</span>'));
+						.append('<span>set view</span>');
 
 					widget.createButton()
 						.on('click', function (e) {
-							console.log(widget.getVisibleRange());
+							console.log(widget.activeChart().getVisibleRange());
 						})
-						.append($('<span>get range</span>'));
+						.append('<span>get range</span>');
 
 					var position = widget.chart().createPositionLine()
 						.onReverse(function(text) {
