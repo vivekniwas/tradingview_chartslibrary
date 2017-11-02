@@ -1,3 +1,4 @@
+export declare type ResolutionString = string;
 export interface Exchange {
 	value: string;
 	name: string;
@@ -7,10 +8,9 @@ export interface DatafeedSymbolType {
 	name: string;
 	value: string;
 }
-export declare type Resolution = string | number;
 export interface DatafeedConfiguration {
 	exchanges?: Exchange[];
-	supported_resolutions?: Resolution[];
+	supported_resolutions?: ResolutionString[];
 	supports_marks?: boolean;
 	supports_time?: boolean;
 	supports_timescale_marks?: boolean;
@@ -103,7 +103,7 @@ export interface LibrarySymbolInfo {
 	/**
 	 * An array of resolutions which should be enabled in resolutions picker for this symbol.
 	 */
-	supported_resolutions: string[];
+	supported_resolutions: ResolutionString[];
 	/**
 	 * @example (for ex.: "1,5,60") - only these resolutions will be requested, all others will be built using them if possible
 	 */
@@ -189,9 +189,9 @@ export declare type GetMarksCallback<T> = (marks: T[]) => void;
 export declare type ServerTimeCallback = (serverTime: number) => void;
 export declare type ErrorCallback = (reason: string) => void;
 export interface IDatafeedChartApi {
-	calculateHistoryDepth?(resolution: string | number, resolutionBack: ResolutionBackValues, intervalBack: number): HistoryDepth | undefined;
-	getMarks?(symbolInfo: LibrarySymbolInfo, startDate: number, endDate: number, onDataCallback: GetMarksCallback<Mark>, resolution: string): void;
-	getTimescaleMarks?(symbolInfo: LibrarySymbolInfo, startDate: number, endDate: number, onDataCallback: GetMarksCallback<TimescaleMark>, resolution: string): void;
+	calculateHistoryDepth?(resolution: ResolutionString, resolutionBack: ResolutionBackValues, intervalBack: number): HistoryDepth | undefined;
+	getMarks?(symbolInfo: LibrarySymbolInfo, startDate: number, endDate: number, onDataCallback: GetMarksCallback<Mark>, resolution: ResolutionString): void;
+	getTimescaleMarks?(symbolInfo: LibrarySymbolInfo, startDate: number, endDate: number, onDataCallback: GetMarksCallback<TimescaleMark>, resolution: ResolutionString): void;
 	/**
 	 * This function is called if configuration flag supports_time is set to true when chart needs to know the server time.
 	 * The charting library expects callback to be called once.
@@ -200,7 +200,9 @@ export interface IDatafeedChartApi {
 	getServerTime?(callback: ServerTimeCallback): void;
 	searchSymbols(userInput: string, exchange: string, symbolType: string, onResult: SearchSymbolsCallback): void;
 	resolveSymbol(symbolName: string, onResolve: ResolveCallback, onError: ErrorCallback): void;
-	getBars(symbolInfo: LibrarySymbolInfo, resolution: string, rangeStartDate: number, rangeEndDate: number, onResult: HistoryCallback, onError: ErrorCallback, isFirstCall: boolean): void;
-	subscribeBars(symbolInfo: LibrarySymbolInfo, resolution: string, onTick: SubscribeBarsCallback, listenerGuid: string, onResetCacheNeededCallback: () => void): void;
+	getBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, rangeStartDate: number, rangeEndDate: number, onResult: HistoryCallback, onError: ErrorCallback, isFirstCall: boolean): void;
+	subscribeBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, onTick: SubscribeBarsCallback, listenerGuid: string, onResetCacheNeededCallback: () => void): void;
 	unsubscribeBars(listenerGuid: string): void;
 }
+
+export as namespace TradingView;

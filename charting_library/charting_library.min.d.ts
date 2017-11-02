@@ -1,86 +1,6 @@
 /// <reference types="jquery" />
 
 export declare type LanguageCode = 'ar' | 'zh' | 'cs' | 'da_DK' | 'nl_NL' | 'en' | 'et_EE' | 'fr' | 'de' | 'el' | 'he_IL' | 'hu_HU' | 'id_ID' | 'it' | 'ja' | 'ko' | 'fa' | 'pl' | 'pt' | 'ro' | 'ru' | 'sk_SK' | 'es' | 'sv' | 'th' | 'tr' | 'vi';
-export declare type CustomTimezones = 'America/New_York' | 'America/Los_Angeles' | 'America/Chicago' | 'America/Phoenix' | 'America/Toronto' | 'America/Vancouver' | 'America/Argentina/Buenos_Aires' | 'America/El_Salvador' | 'America/Sao_Paulo' | 'America/Bogota' | 'America/Caracas' | 'Europe/Moscow' | 'Europe/Athens' | 'Europe/Berlin' | 'Europe/London' | 'Europe/Madrid' | 'Europe/Paris' | 'Europe/Rome' | 'Europe/Warsaw' | 'Europe/Istanbul' | 'Europe/Zurich' | 'Australia/Sydney' | 'Australia/Brisbane' | 'Australia/Adelaide' | 'Australia/ACT' | 'Asia/Almaty' | 'Asia/Ashkhabad' | 'Asia/Tokyo' | 'Asia/Taipei' | 'Asia/Singapore' | 'Asia/Shanghai' | 'Asia/Seoul' | 'Asia/Tehran' | 'Asia/Dubai' | 'Asia/Kolkata' | 'Asia/Hong_Kong' | 'Asia/Bangkok' | 'Pacific/Auckland' | 'Pacific/Chatham' | 'Pacific/Fakaofo' | 'Pacific/Honolulu' | 'America/Mexico_City' | 'Africa/Johannesburg' | 'Asia/Kathmandu' | 'US/Mountain';
-export declare type Timezone = 'UTC' | CustomTimezones;
-export interface LibrarySymbolInfo {
-	/**
-	 * Symbol Name
-	 */
-	name: string;
-	full_name: string;
-	base_name?: [string];
-	/**
-	 * Unique symbol id
-	 */
-	ticker?: string;
-	description: string;
-	type: string;
-	/**
-	 * @example "1700-0200"
-	 */
-	session: string;
-	/**
-	 * Traded exchange
-	 * @example "NYSE"
-	 */
-	exchange: string;
-	listed_exchange: string;
-	timezone: Timezone;
-	/**
-	 * Code (Tick)
-	 * @example 8/16/.../256 (1/8/100 1/16/100 ... 1/256/100) or 1/10/.../10000000 (1 0.1 ... 0.0000001)
-	 */
-	pricescale: number;
-	/**
-	 * The number of units that make up one tick.
-	 * @example For example, U.S. equities are quotes in decimals, and tick in decimals, and can go up +/- .01. So the tick increment is 1. But the e-mini S&P futures contract, though quoted in decimals, goes up in .25 increments, so the tick increment is 25. (see also Tick Size)
-	 */
-	minmov: number;
-	fractional?: boolean;
-	/**
-	 * @example Quarters of 1/32: pricescale=128, minmovement=1, minmovement2=4
-	 */
-	minmove2?: number;
-	/**
-	 * false if DWM only
-	 */
-	has_intraday?: boolean;
-	/**
-	 * An array of resolutions which should be enabled in resolutions picker for this symbol.
-	 */
-	supported_resolutions: string[];
-	/**
-	 * @example (for ex.: "1,5,60") - only these resolutions will be requested, all others will be built using them if possible
-	 */
-	intraday_multipliers?: string[];
-	has_seconds?: boolean;
-	/**
-	 * It is an array containing seconds resolutions (in seconds without a postfix) the datafeed builds by itself.
-	 */
-	seconds_multipliers?: string[];
-	has_daily?: boolean;
-	has_weekly_and_monthly?: boolean;
-	has_empty_bars?: boolean;
-	force_session_rebuild?: boolean;
-	has_no_volume?: boolean;
-	/**
-	 * Integer showing typical volume value decimal places for this symbol
-	 */
-	volume_precision?: number;
-	data_status?: 'streaming' | 'endofday' | 'pulsed' | 'delayed_streaming';
-	/**
-	 * Boolean showing whether this symbol is expired futures contract or not.
-	 */
-	expired?: boolean;
-	/**
-	 * Unix timestamp of expiration date.
-	 */
-	expiration_date?: number;
-	sector?: string;
-	industry?: string;
-	currency_code?: string;
-}
 export interface ISubscription<TFunc extends Function> {
 	subscribe(obj: object | null, member: TFunc, singleshot?: boolean): void;
 	unsubscribe(obj: object | null, member: TFunc): void;
@@ -380,8 +300,6 @@ export interface BrokerConfigFlags {
 	supportTrades?: boolean;
 	supportClosePosition?: boolean;
 	supportCloseTrade?: boolean;
-	supportCustomLoginForm?: boolean;
-	supportLoginForm?: boolean;
 	supportEditAmount?: boolean;
 	supportLevel2Data?: boolean;
 	supportMultiposition?: boolean;
@@ -520,6 +438,7 @@ export interface IBrokerTerminal extends IBrokerWithoutRealtime {
 	subscribeRealtime(symbol: string): void;
 	unsubscribeRealtime(symbol: string): void;
 }
+export declare type ResolutionString = string;
 export interface Exchange {
 	value: string;
 	name: string;
@@ -529,10 +448,9 @@ export interface DatafeedSymbolType {
 	name: string;
 	value: string;
 }
-export declare type Resolution = string | number;
 export interface DatafeedConfiguration {
 	exchanges?: Exchange[];
-	supported_resolutions?: Resolution[];
+	supported_resolutions?: ResolutionString[];
 	supports_marks?: boolean;
 	supports_time?: boolean;
 	supports_timescale_marks?: boolean;
@@ -576,6 +494,86 @@ export interface IDatafeedQuotesApi {
 	getQuotes(symbols: string[], onDataCallback: QuotesCallback, onErrorCallback: (msg: string) => void): void;
 	subscribeQuotes(symbols: string[], fastSymbols: string[], onRealtimeCallback: QuotesCallback, listenerGUID: string): void;
 	unsubscribeQuotes(listenerGUID: string): void;
+}
+export declare type CustomTimezones = 'America/New_York' | 'America/Los_Angeles' | 'America/Chicago' | 'America/Phoenix' | 'America/Toronto' | 'America/Vancouver' | 'America/Argentina/Buenos_Aires' | 'America/El_Salvador' | 'America/Sao_Paulo' | 'America/Bogota' | 'America/Caracas' | 'Europe/Moscow' | 'Europe/Athens' | 'Europe/Berlin' | 'Europe/London' | 'Europe/Madrid' | 'Europe/Paris' | 'Europe/Rome' | 'Europe/Warsaw' | 'Europe/Istanbul' | 'Europe/Zurich' | 'Australia/Sydney' | 'Australia/Brisbane' | 'Australia/Adelaide' | 'Australia/ACT' | 'Asia/Almaty' | 'Asia/Ashkhabad' | 'Asia/Tokyo' | 'Asia/Taipei' | 'Asia/Singapore' | 'Asia/Shanghai' | 'Asia/Seoul' | 'Asia/Tehran' | 'Asia/Dubai' | 'Asia/Kolkata' | 'Asia/Hong_Kong' | 'Asia/Bangkok' | 'Pacific/Auckland' | 'Pacific/Chatham' | 'Pacific/Fakaofo' | 'Pacific/Honolulu' | 'America/Mexico_City' | 'Africa/Johannesburg' | 'Asia/Kathmandu' | 'US/Mountain';
+export declare type Timezone = 'UTC' | CustomTimezones;
+export interface LibrarySymbolInfo {
+	/**
+	 * Symbol Name
+	 */
+	name: string;
+	full_name: string;
+	base_name?: [string];
+	/**
+	 * Unique symbol id
+	 */
+	ticker?: string;
+	description: string;
+	type: string;
+	/**
+	 * @example "1700-0200"
+	 */
+	session: string;
+	/**
+	 * Traded exchange
+	 * @example "NYSE"
+	 */
+	exchange: string;
+	listed_exchange: string;
+	timezone: Timezone;
+	/**
+	 * Code (Tick)
+	 * @example 8/16/.../256 (1/8/100 1/16/100 ... 1/256/100) or 1/10/.../10000000 (1 0.1 ... 0.0000001)
+	 */
+	pricescale: number;
+	/**
+	 * The number of units that make up one tick.
+	 * @example For example, U.S. equities are quotes in decimals, and tick in decimals, and can go up +/- .01. So the tick increment is 1. But the e-mini S&P futures contract, though quoted in decimals, goes up in .25 increments, so the tick increment is 25. (see also Tick Size)
+	 */
+	minmov: number;
+	fractional?: boolean;
+	/**
+	 * @example Quarters of 1/32: pricescale=128, minmovement=1, minmovement2=4
+	 */
+	minmove2?: number;
+	/**
+	 * false if DWM only
+	 */
+	has_intraday?: boolean;
+	/**
+	 * An array of resolutions which should be enabled in resolutions picker for this symbol.
+	 */
+	supported_resolutions: ResolutionString[];
+	/**
+	 * @example (for ex.: "1,5,60") - only these resolutions will be requested, all others will be built using them if possible
+	 */
+	intraday_multipliers?: string[];
+	has_seconds?: boolean;
+	/**
+	 * It is an array containing seconds resolutions (in seconds without a postfix) the datafeed builds by itself.
+	 */
+	seconds_multipliers?: string[];
+	has_daily?: boolean;
+	has_weekly_and_monthly?: boolean;
+	has_empty_bars?: boolean;
+	force_session_rebuild?: boolean;
+	has_no_volume?: boolean;
+	/**
+	 * Integer showing typical volume value decimal places for this symbol
+	 */
+	volume_precision?: number;
+	data_status?: 'streaming' | 'endofday' | 'pulsed' | 'delayed_streaming';
+	/**
+	 * Boolean showing whether this symbol is expired futures contract or not.
+	 */
+	expired?: boolean;
+	/**
+	 * Unix timestamp of expiration date.
+	 */
+	expiration_date?: number;
+	sector?: string;
+	industry?: string;
+	currency_code?: string;
 }
 export interface Bar {
 	time: number;
@@ -631,9 +629,9 @@ export declare type GetMarksCallback<T> = (marks: T[]) => void;
 export declare type ServerTimeCallback = (serverTime: number) => void;
 export declare type ErrorCallback = (reason: string) => void;
 export interface IDatafeedChartApi {
-	calculateHistoryDepth?(resolution: string | number, resolutionBack: ResolutionBackValues, intervalBack: number): HistoryDepth | undefined;
-	getMarks?(symbolInfo: LibrarySymbolInfo, startDate: number, endDate: number, onDataCallback: GetMarksCallback<Mark>, resolution: string): void;
-	getTimescaleMarks?(symbolInfo: LibrarySymbolInfo, startDate: number, endDate: number, onDataCallback: GetMarksCallback<TimescaleMark>, resolution: string): void;
+	calculateHistoryDepth?(resolution: ResolutionString, resolutionBack: ResolutionBackValues, intervalBack: number): HistoryDepth | undefined;
+	getMarks?(symbolInfo: LibrarySymbolInfo, startDate: number, endDate: number, onDataCallback: GetMarksCallback<Mark>, resolution: ResolutionString): void;
+	getTimescaleMarks?(symbolInfo: LibrarySymbolInfo, startDate: number, endDate: number, onDataCallback: GetMarksCallback<TimescaleMark>, resolution: ResolutionString): void;
 	/**
 	 * This function is called if configuration flag supports_time is set to true when chart needs to know the server time.
 	 * The charting library expects callback to be called once.
@@ -642,22 +640,22 @@ export interface IDatafeedChartApi {
 	getServerTime?(callback: ServerTimeCallback): void;
 	searchSymbols(userInput: string, exchange: string, symbolType: string, onResult: SearchSymbolsCallback): void;
 	resolveSymbol(symbolName: string, onResolve: ResolveCallback, onError: ErrorCallback): void;
-	getBars(symbolInfo: LibrarySymbolInfo, resolution: string, rangeStartDate: number, rangeEndDate: number, onResult: HistoryCallback, onError: ErrorCallback, isFirstCall: boolean): void;
-	subscribeBars(symbolInfo: LibrarySymbolInfo, resolution: string, onTick: SubscribeBarsCallback, listenerGuid: string, onResetCacheNeededCallback: () => void): void;
+	getBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, rangeStartDate: number, rangeEndDate: number, onResult: HistoryCallback, onError: ErrorCallback, isFirstCall: boolean): void;
+	subscribeBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, onTick: SubscribeBarsCallback, listenerGuid: string, onResetCacheNeededCallback: () => void): void;
 	unsubscribeBars(listenerGuid: string): void;
 }
 export interface ChartMetaInfo {
 	id: string;
 	name: string;
 	symbol: string;
-	resolution: string;
+	resolution: ResolutionString;
 	timestamp: number;
 }
 export interface ChartData {
 	id: string;
 	name: string;
 	symbol: string;
-	resolution: string;
+	resolution: ResolutionString;
 	content: string;
 }
 export interface StudyTemplateMetaInfo {
@@ -681,134 +679,6 @@ export interface RestBrokerMetaInfo {
 	url: string;
 	access_token: string;
 }
-export interface AccessListItem {
-	name: string;
-	grayed?: boolean;
-}
-export interface AccessList {
-	type: 'black' | 'white';
-	tools: AccessListItem[];
-}
-export interface NumericFormattingParams {
-	decimal_sign: string;
-}
-export declare type AvailableSaveloadVersions = '1.0' | '1.1';
-export interface Overrides {
-	[key: string]: string | number | boolean;
-}
-export interface WidgetBarParams {
-	details?: boolean;
-	watchlist?: boolean;
-	news?: boolean;
-	watchlist_settings?: {
-		default_symbols: string[];
-		readonly?: boolean;
-	};
-}
-export interface RssNewsFeedInfo {
-	url: string;
-	name: string;
-}
-export declare type RssNewsFeedItem = RssNewsFeedInfo | RssNewsFeedInfo[];
-export interface RssNewsFeedParams {
-	default: RssNewsFeedItem;
-	[symbolType: string]: RssNewsFeedItem;
-}
-export interface NewsProvider {
-	is_news_generic?: boolean;
-	get_news(symbol: string, callback: (items: NewsItem[]) => void): void;
-}
-export interface CustomFormatter {
-	format(date: Date): string;
-	formatLocal(date: Date): string;
-}
-export interface CustomFormatters {
-	timeFormatter: CustomFormatter;
-	dateFormatter: CustomFormatter;
-}
-export interface TimeFrame {
-	text: string;
-	resolution: string;
-	description?: string;
-	title?: string;
-}
-export interface Favorites {
-	intervals: string[];
-	chartTypes: string[];
-}
-export interface NewsItem {
-	fullDescription: string;
-	link?: string;
-	published: number;
-	shortDescription?: string;
-	source: string;
-	title: string;
-}
-export interface LoadingScreenOptions {
-	foregroundColor?: string;
-	backgroundColor?: string;
-}
-export interface InitialSettingsMap {
-	[key: string]: string;
-}
-export interface ISettingsAdapter {
-	initialSettings?: InitialSettingsMap;
-	setValue(key: string, value: string): void;
-	removeValue(key: string): void;
-}
-export declare type IBasicDataFeed = IDatafeedChartApi & IExternalDatafeed;
-export interface ChartingLibraryWidgetOptions {
-	container_id: string;
-	datafeed: IBasicDataFeed | (IBasicDataFeed & IDatafeedQuotesApi);
-	interval: string;
-	symbol: string;
-	auto_save_delay?: number;
-	autosize?: boolean;
-	debug?: boolean;
-	disabled_features?: string[];
-	drawings_access?: AccessList;
-	enabled_features?: string[];
-	fullscreen?: boolean;
-	height?: number;
-	library_path?: string;
-	locale: LanguageCode;
-	numeric_formatting?: NumericFormattingParams;
-	saved_data?: object;
-	studies_access?: AccessList;
-	study_count_limit?: number;
-	symbol_search_request_delay?: number;
-	timeframe?: string;
-	timezone?: 'exchange' | Timezone;
-	toolbar_bg?: string;
-	width?: number;
-	charts_storage_url?: string;
-	charts_storage_api_version?: AvailableSaveloadVersions;
-	client_id?: string;
-	user_id?: string;
-	load_last_chart?: boolean;
-	studies_overrides: StudyOverrides;
-	customFormatters?: CustomFormatters;
-	overrides?: Overrides;
-	snapshot_url?: string;
-	indicators_file_name?: string;
-	preset?: 'mobile';
-	time_frames?: TimeFrame[];
-	custom_css_url?: string;
-	favorites?: Favorites;
-	save_load_adapter?: IExternalSaveLoadAdapter;
-	loading_screen?: LoadingScreenOptions;
-	settings_adapter?: ISettingsAdapter;
-}
-export interface TradingTerminalWidgetOptions extends ChartingLibraryWidgetOptions {
-	brokerConfig?: SingleBrokerMetaInfo;
-	restConfig?: RestBrokerMetaInfo;
-	widgetbar?: WidgetBarParams;
-	rss_news_feed?: RssNewsFeedParams;
-	news_provider?: NewsProvider;
-	brokerFactory?(host: IBrokerConnectionAdapterHost): IBrokerWithoutRealtime | IBrokerTerminal;
-}
-export declare type AvailableLayouts = 's' | '2h' | '2-1' | '2v' | '3h' | '3v' | '3s' | '4' | '6' | '8';
-export declare type SupportedLineTools = 'text' | 'anchored_text' | 'note' | 'anchored_note' | 'double_curve' | 'arc' | 'icon' | 'arrow_up' | 'arrow_down' | 'arrow_left' | 'arrow_right' | 'price_label' | 'flag' | 'vertical_line' | 'horizontal_line' | 'horizontal_ray' | 'trend_line' | 'trend_angle' | 'arrow' | 'ray' | 'extended' | 'parallel_channel' | 'disjoint_angle' | 'flat_bottom' | 'pitchfork' | 'schiff_pitchfork_modified' | 'schiff_pitchfork' | 'balloon' | 'inside_pitchfork' | 'pitchfan' | 'gannbox' | 'gannbox_square' | 'gannbox_fan' | 'fib_retracement' | 'fib_trend_ext' | 'fib_speed_resist_fan' | 'fib_timezone' | 'fib_trend_time' | 'fib_circles' | 'fib_spiral' | 'fib_speed_resist_arcs' | 'fib_channel' | 'xabcd_pattern' | 'cypher_pattern' | 'abcd_pattern' | 'callout' | 'triangle_pattern' | '3divers_pattern' | 'head_and_shoulders' | 'fib_wedge' | 'elliott_impulse_wave' | 'elliott_triangle_wave' | 'elliott_triple_combo' | 'elliott_correction' | 'elliott_double_combo' | 'cyclic_lines' | 'time_cycles' | 'sine_line' | 'long_position' | 'short_position' | 'forecast' | 'date_range' | 'price_range' | 'date_and_price_range' | 'bars_pattern' | 'ghost_feed' | 'projection' | 'rectangle' | 'rotated_rectangle' | 'ellipse' | 'triangle' | 'polyline' | 'curve' | 'regression_trend' | 'cursor' | 'dot' | 'arrow_cursor' | 'eraser' | 'measure' | 'zoom' | 'brush';
 export interface IOrderLineAdapter {
 	remove(): void;
 	onModify(callback: () => void): this;
@@ -944,16 +814,17 @@ export interface StudyInputInfo {
 	type: string;
 	localizedName: string;
 }
-export interface StudyInputValue {
+export declare type StudyInputValueType = string | number | boolean;
+export interface StudyInputValueItem {
 	id: StudyInputId;
-	value: string | number | boolean;
+	value: StudyInputValueType;
 }
 export interface IStudyApi {
 	isUserEditEnabled(): boolean;
 	setUserEditEnabled(enabled: boolean): void;
 	getInputsInfo(): StudyInputInfo[];
-	getInputValues(): StudyInputValue[];
-	setInputValues(values: StudyInputValue[]): void;
+	getInputValues(): StudyInputValueItem[];
+	setInputValues(values: StudyInputValueItem[]): void;
 	mergeUp(): void;
 	mergeDown(): void;
 	unmergeUp(): void;
@@ -1042,15 +913,21 @@ export interface SymbolExt {
 export interface CreateTradingPrimitiveOptions {
 	disableUndo?: boolean;
 }
+/**
+ * Time frame must have following format: `<integer><y|m|d>` (\d+(y|m|d) as Regex).
+ */
+export declare type TimeFrame = string;
 export interface IChartWidgetApi {
 	onDataLoaded(): ISubscription<() => void>;
 	onSymbolChanged(): ISubscription<() => void>;
-	onIntervalChanged(): ISubscription<() => void>;
+	onIntervalChanged(): ISubscription<(interval: ResolutionString, timeFrameParameters: {
+		timeframe?: TimeFrame;
+	}) => void>;
 	dataReady(callback: () => void): boolean;
 	crossHairMoved(callback: (params: CrossHairMovedEventParams) => void): void;
 	setVisibleRange(range: VisibleTimeRange, callback: () => void): void;
 	setSymbol(symbol: string, callback: () => void): void;
-	setResolution(resolution: string, callback: () => void): void;
+	setResolution(resolution: ResolutionString, callback: () => void): void;
 	resetData(): void;
 	executeActionById(actionId: ChartActionId): void;
 	getCheckableActionState(actionId: ChartActionId): boolean;
@@ -1063,7 +940,7 @@ export interface IChartWidgetApi {
 	 * @deprecated Use shape/study API instead ([getStudyById] / [getShapeById])
 	 */
 	setEntityVisibility(entityId: EntityId, isVisible: boolean): void;
-	createStudy<TStudyInputs extends object, TOverrides extends StudyOverrides>(name: string, forceOverlay: boolean, lock?: boolean, inputs?: TStudyInputs[], callback?: (entityId: EntityId) => void, overrides?: TOverrides, options?: CreateStudyOptions): EntityId | null;
+	createStudy<TStudyInputs extends StudyInputValueType, TOverrides extends StudyOverrides>(name: string, forceOverlay: boolean, lock?: boolean, inputs?: TStudyInputs[], callback?: (entityId: EntityId) => void, overrides?: TOverrides, options?: CreateStudyOptions): EntityId | null;
 	getStudyById(entityId: EntityId): IStudyApi;
 	createShape<TOverrides extends object>(point: ShapePoint, options: CreateShapeOptions<TOverrides>): EntityId | null;
 	createMultipointShape<TOverrides extends object>(points: ShapePoint[], options: CreateShapeOptions<TOverrides>): EntityId | null;
@@ -1078,13 +955,141 @@ export interface IChartWidgetApi {
 	createExecutionShape(options: CreateTradingPrimitiveOptions): IExecutionLineAdapter;
 	symbol(): string;
 	symbolExt(): SymbolExt;
-	resolution(): string;
+	resolution(): ResolutionString;
 	getVisibleRange(): VisibleTimeRange;
 	getVisiblePriceRange(): VisiblePriceRange;
 	priceFormatter(): IFormatter;
 	chartType(): SeriesStyle;
 	setTimezone(timezone: 'exchange' | Timezone): void;
 }
+export interface AccessListItem {
+	name: string;
+	grayed?: boolean;
+}
+export interface AccessList {
+	type: 'black' | 'white';
+	tools: AccessListItem[];
+}
+export interface NumericFormattingParams {
+	decimal_sign: string;
+}
+export declare type AvailableSaveloadVersions = '1.0' | '1.1';
+export interface Overrides {
+	[key: string]: string | number | boolean;
+}
+export interface WidgetBarParams {
+	details?: boolean;
+	watchlist?: boolean;
+	news?: boolean;
+	watchlist_settings?: {
+		default_symbols: string[];
+		readonly?: boolean;
+	};
+}
+export interface RssNewsFeedInfo {
+	url: string;
+	name: string;
+}
+export declare type RssNewsFeedItem = RssNewsFeedInfo | RssNewsFeedInfo[];
+export interface RssNewsFeedParams {
+	default: RssNewsFeedItem;
+	[symbolType: string]: RssNewsFeedItem;
+}
+export interface NewsProvider {
+	is_news_generic?: boolean;
+	get_news(symbol: string, callback: (items: NewsItem[]) => void): void;
+}
+export interface CustomFormatter {
+	format(date: Date): string;
+	formatLocal(date: Date): string;
+}
+export interface CustomFormatters {
+	timeFormatter: CustomFormatter;
+	dateFormatter: CustomFormatter;
+}
+export interface TimeFrameItem {
+	text: TimeFrame;
+	resolution: ResolutionString;
+	description?: string;
+	title?: string;
+}
+export interface Favorites {
+	intervals: ResolutionString[];
+	chartTypes: string[];
+}
+export interface NewsItem {
+	fullDescription: string;
+	link?: string;
+	published: number;
+	shortDescription?: string;
+	source: string;
+	title: string;
+}
+export interface LoadingScreenOptions {
+	foregroundColor?: string;
+	backgroundColor?: string;
+}
+export interface InitialSettingsMap {
+	[key: string]: string;
+}
+export interface ISettingsAdapter {
+	initialSettings?: InitialSettingsMap;
+	setValue(key: string, value: string): void;
+	removeValue(key: string): void;
+}
+export declare type IBasicDataFeed = IDatafeedChartApi & IExternalDatafeed;
+export interface ChartingLibraryWidgetOptions {
+	container_id: string;
+	datafeed: IBasicDataFeed | (IBasicDataFeed & IDatafeedQuotesApi);
+	interval: ResolutionString;
+	symbol: string;
+	auto_save_delay?: number;
+	autosize?: boolean;
+	debug?: boolean;
+	disabled_features?: string[];
+	drawings_access?: AccessList;
+	enabled_features?: string[];
+	fullscreen?: boolean;
+	height?: number;
+	library_path?: string;
+	locale: LanguageCode;
+	numeric_formatting?: NumericFormattingParams;
+	saved_data?: object;
+	studies_access?: AccessList;
+	study_count_limit?: number;
+	symbol_search_request_delay?: number;
+	timeframe?: TimeFrame;
+	timezone?: 'exchange' | Timezone;
+	toolbar_bg?: string;
+	width?: number;
+	charts_storage_url?: string;
+	charts_storage_api_version?: AvailableSaveloadVersions;
+	client_id?: string;
+	user_id?: string;
+	load_last_chart?: boolean;
+	studies_overrides: StudyOverrides;
+	customFormatters?: CustomFormatters;
+	overrides?: Overrides;
+	snapshot_url?: string;
+	indicators_file_name?: string;
+	preset?: 'mobile';
+	time_frames?: TimeFrameItem[];
+	custom_css_url?: string;
+	favorites?: Favorites;
+	save_load_adapter?: IExternalSaveLoadAdapter;
+	loading_screen?: LoadingScreenOptions;
+	settings_adapter?: ISettingsAdapter;
+}
+export interface TradingTerminalWidgetOptions extends ChartingLibraryWidgetOptions {
+	brokerConfig?: SingleBrokerMetaInfo;
+	restConfig?: RestBrokerMetaInfo;
+	widgetbar?: WidgetBarParams;
+	rss_news_feed?: RssNewsFeedParams;
+	news_provider?: NewsProvider;
+	brokerFactory?(host: IBrokerConnectionAdapterHost): IBrokerWithoutRealtime | IBrokerTerminal;
+}
+export declare type AvailableLayouts = 's' | '2h' | '2-1' | '2v' | '3h' | '3v' | '3s' | '4' | '6' | '8';
+export declare type SupportedLineTools = 'text' | 'anchored_text' | 'note' | 'anchored_note' | 'double_curve' | 'arc' | 'icon' | 'arrow_up' | 'arrow_down' | 'arrow_left' | 'arrow_right' | 'price_label' | 'flag' | 'vertical_line' | 'horizontal_line' | 'horizontal_ray' | 'trend_line' | 'trend_angle' | 'arrow' | 'ray' | 'extended' | 'parallel_channel' | 'disjoint_angle' | 'flat_bottom' | 'pitchfork' | 'schiff_pitchfork_modified' | 'schiff_pitchfork' | 'balloon' | 'inside_pitchfork' | 'pitchfan' | 'gannbox' | 'gannbox_square' | 'gannbox_fan' | 'fib_retracement' | 'fib_trend_ext' | 'fib_speed_resist_fan' | 'fib_timezone' | 'fib_trend_time' | 'fib_circles' | 'fib_spiral' | 'fib_speed_resist_arcs' | 'fib_channel' | 'xabcd_pattern' | 'cypher_pattern' | 'abcd_pattern' | 'callout' | 'triangle_pattern' | '3divers_pattern' | 'head_and_shoulders' | 'fib_wedge' | 'elliott_impulse_wave' | 'elliott_triangle_wave' | 'elliott_triple_combo' | 'elliott_correction' | 'elliott_double_combo' | 'cyclic_lines' | 'time_cycles' | 'sine_line' | 'long_position' | 'short_position' | 'forecast' | 'date_range' | 'price_range' | 'date_and_price_range' | 'bars_pattern' | 'ghost_feed' | 'projection' | 'rectangle' | 'rotated_rectangle' | 'ellipse' | 'triangle' | 'polyline' | 'curve' | 'regression_trend' | 'cursor' | 'dot' | 'arrow_cursor' | 'eraser' | 'measure' | 'zoom' | 'brush';
 export declare type EditObjectDialogObjectType = 'mainSeries' | 'drawing' | 'study' | 'other';
 export interface EditObjectDialogEventParams {
 	objectType: EditObjectDialogObjectType;
@@ -1154,7 +1159,7 @@ export interface DialogParams<CallbackType> {
 }
 export interface SymbolIntervalResult {
 	symbol: string;
-	interval: string;
+	interval: ResolutionString;
 }
 export interface SaveLoadChartRecord {
 	id: string;
@@ -1162,7 +1167,7 @@ export interface SaveLoadChartRecord {
 	image_url: string;
 	modified_iso: number;
 	short_symbol: string;
-	interval: string;
+	interval: ResolutionString;
 }
 export interface CreateButtonOptions {
 	align: 'right' | 'left';
@@ -1175,7 +1180,7 @@ export interface IChartingLibraryWidget {
 	unsubscribe<EventName extends keyof SubscribeEventsMap>(event: EventName, callback: SubscribeEventsMap[EventName]): void;
 	chart(index?: number): IChartWidgetApi;
 	setLanguage(lang: LanguageCode): void;
-	setSymbol(symbol: string, interval: string, callback: EmptyCallback): void;
+	setSymbol(symbol: string, interval: ResolutionString, callback: EmptyCallback): void;
 	remove(): void;
 	closePopupsAndDialogs(): void;
 	selectLineTool(linetool: SupportedLineTools): void;
@@ -1211,3 +1216,5 @@ export interface ChartingLibraryWidgetConstructor {
 export declare function version(): string;
 export declare function onready(callback: () => void): void;
 export declare const widget: ChartingLibraryWidgetConstructor;
+
+export as namespace TradingView;

@@ -12,6 +12,7 @@ import {
 	OnReadyCallback,
 	QuotesCallback,
 	ResolutionBackValues,
+	ResolutionString,
 	ResolveCallback,
 	SearchSymbolResultItem,
 	SearchSymbolsCallback,
@@ -42,9 +43,6 @@ export interface UdfCompatibleConfiguration extends DatafeedConfiguration {
 	// tslint:disable
 	supports_search?: boolean;
 	supports_group_request?: boolean;
-	supported_resolutions?: string[];
-	supports_marks?: boolean;
-	supports_timescale_marks?: boolean;
 	// tslint:enable
 }
 
@@ -133,11 +131,11 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 		this._quotesPulseProvider.unsubscribeQuotes(listenerGuid);
 	}
 
-	public calculateHistoryDepth(resolution: string | number, resolutionBack: ResolutionBackValues, intervalBack: number): HistoryDepth | undefined {
+	public calculateHistoryDepth(resolution: ResolutionString, resolutionBack: ResolutionBackValues, intervalBack: number): HistoryDepth | undefined {
 		return undefined;
 	}
 
-	public getMarks(symbolInfo: LibrarySymbolInfo, startDate: number, endDate: number, onDataCallback: GetMarksCallback<Mark>, resolution: string): void {
+	public getMarks(symbolInfo: LibrarySymbolInfo, startDate: number, endDate: number, onDataCallback: GetMarksCallback<Mark>, resolution: ResolutionString): void {
 		if (!this._configuration.supports_marks) {
 			return;
 		}
@@ -176,7 +174,7 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 			});
 	}
 
-	public getTimescaleMarks(symbolInfo: LibrarySymbolInfo, startDate: number, endDate: number, onDataCallback: GetMarksCallback<TimescaleMark>, resolution: string): void {
+	public getTimescaleMarks(symbolInfo: LibrarySymbolInfo, startDate: number, endDate: number, onDataCallback: GetMarksCallback<TimescaleMark>, resolution: ResolutionString): void {
 		if (!this._configuration.supports_timescale_marks) {
 			return;
 		}
@@ -299,7 +297,7 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 		}
 	}
 
-	public getBars(symbolInfo: LibrarySymbolInfo, resolution: string, rangeStartDate: number, rangeEndDate: number, onResult: HistoryCallback, onError: ErrorCallback): void {
+	public getBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, rangeStartDate: number, rangeEndDate: number, onResult: HistoryCallback, onError: ErrorCallback): void {
 		this._historyProvider.getBars(symbolInfo, resolution, rangeStartDate, rangeEndDate)
 			.then((result: GetBarsResult) => {
 				onResult(result.bars, result.meta);
@@ -307,7 +305,7 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 			.catch(onError);
 	}
 
-	public subscribeBars(symbolInfo: LibrarySymbolInfo, resolution: string, onTick: SubscribeBarsCallback, listenerGuid: string, onResetCacheNeededCallback: () => void): void {
+	public subscribeBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, onTick: SubscribeBarsCallback, listenerGuid: string, onResetCacheNeededCallback: () => void): void {
 		this._dataPulseProvider.subscribeBars(symbolInfo, resolution, onTick, listenerGuid);
 	}
 
