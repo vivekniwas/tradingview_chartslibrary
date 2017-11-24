@@ -627,6 +627,7 @@ export declare type HistoryCallback = (bars: Bar[], meta: HistoryMetadata) => vo
 export declare type SubscribeBarsCallback = (bar: Bar) => void;
 export declare type GetMarksCallback<T> = (marks: T[]) => void;
 export declare type ServerTimeCallback = (serverTime: number) => void;
+export declare type DomeCallback = (data: DOMData) => void;
 export declare type ErrorCallback = (reason: string) => void;
 export interface IDatafeedChartApi {
 	calculateHistoryDepth?(resolution: ResolutionString, resolutionBack: ResolutionBackValues, intervalBack: number): HistoryDepth | undefined;
@@ -643,6 +644,8 @@ export interface IDatafeedChartApi {
 	getBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, rangeStartDate: number, rangeEndDate: number, onResult: HistoryCallback, onError: ErrorCallback, isFirstCall: boolean): void;
 	subscribeBars(symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, onTick: SubscribeBarsCallback, listenerGuid: string, onResetCacheNeededCallback: () => void): void;
 	unsubscribeBars(listenerGuid: string): void;
+	subscribeDepth?(symbolInfo: LibrarySymbolInfo, callback: DomeCallback): string;
+	unsubscribeDepth?(subscriberUID: string): void;
 }
 export interface ChartMetaInfo {
 	id: string;
