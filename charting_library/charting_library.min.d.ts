@@ -146,6 +146,7 @@ export interface InstrumentInfo {
 	pipSize: number;
 	minTick: number;
 	description: string;
+	domVolumePrecision?: number;
 }
 export interface CustomFields {
 	[key: string]: any;
