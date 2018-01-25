@@ -7,7 +7,7 @@ var HistoryProvider = /** @class */ (function () {
     HistoryProvider.prototype.getBars = function (symbolInfo, resolution, rangeStartDate, rangeEndDate) {
         var _this = this;
         var requestParams = {
-            symbol: symbolInfo.ticker !== undefined ? symbolInfo.ticker.toUpperCase() : '',
+            symbol: symbolInfo.ticker || '',
             resolution: resolution,
             from: rangeStartDate,
             to: rangeEndDate,

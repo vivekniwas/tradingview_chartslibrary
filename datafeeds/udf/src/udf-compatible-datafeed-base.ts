@@ -141,7 +141,7 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 		}
 
 		const requestParams: RequestParams = {
-			symbol: symbolInfo.ticker !== undefined ? symbolInfo.ticker.toUpperCase() : '',
+			symbol: symbolInfo.ticker || '',
 			from: startDate,
 			to: endDate,
 			resolution: resolution,
@@ -180,7 +180,7 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 		}
 
 		const requestParams: RequestParams = {
-			symbol: symbolInfo.ticker !== undefined ? symbolInfo.ticker.toUpperCase() : '',
+			symbol: symbolInfo.ticker || '',
 			from: startDate,
 			to: endDate,
 			resolution: resolution,
@@ -273,7 +273,7 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 
 		if (!this._configuration.supports_group_request) {
 			const params: RequestParams = {
-				symbol: symbolName.toUpperCase(),
+				symbol: symbolName,
 			};
 
 			this._send('symbols', params)

@@ -55,7 +55,7 @@ export class HistoryProvider {
 
 	public getBars(symbolInfo: LibrarySymbolInfo, resolution: string, rangeStartDate: number, rangeEndDate: number): Promise<GetBarsResult> {
 		const requestParams: RequestParams = {
-			symbol: symbolInfo.ticker !== undefined ? symbolInfo.ticker.toUpperCase() : '',
+			symbol: symbolInfo.ticker || '',
 			resolution: resolution,
 			from: rangeStartDate,
 			to: rangeEndDate,

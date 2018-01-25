@@ -54,7 +54,7 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
             return;
         }
         var requestParams = {
-            symbol: symbolInfo.ticker !== undefined ? symbolInfo.ticker.toUpperCase() : '',
+            symbol: symbolInfo.ticker || '',
             from: startDate,
             to: endDate,
             resolution: resolution,
@@ -88,7 +88,7 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
             return;
         }
         var requestParams = {
-            symbol: symbolInfo.ticker !== undefined ? symbolInfo.ticker.toUpperCase() : '',
+            symbol: symbolInfo.ticker || '',
             from: startDate,
             to: endDate,
             resolution: resolution,
@@ -170,7 +170,7 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
         }
         if (!this._configuration.supports_group_request) {
             var params = {
-                symbol: symbolName.toUpperCase(),
+                symbol: symbolName,
             };
             this._send('symbols', params)
                 .then(function (response) {
