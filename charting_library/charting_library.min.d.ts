@@ -43,6 +43,7 @@ export interface IFormatter {
 export declare type Nominal<T, Name extends string> = T & {
 	[Symbol.species]: Name;
 };
+export declare type StudyInputValueType = string | number | boolean;
 export declare type StudyOverrideValueType = string | number | boolean;
 export interface StudyOverrides {
 	[key: string]: StudyOverrideValueType;
@@ -818,7 +819,6 @@ export interface StudyInputInfo {
 	type: string;
 	localizedName: string;
 }
-export declare type StudyInputValueType = string | number | boolean;
 export interface StudyInputValueItem {
 	id: StudyInputId;
 	value: StudyInputValueType;
@@ -833,6 +833,11 @@ export interface IStudyApi {
 	mergeDown(): void;
 	unmergeUp(): void;
 	unmergeDown(): void;
+	isVisible(): boolean;
+	setVisible(visible: boolean): void;
+	bringToFront(): void;
+	sendToBack(): void;
+	applyOverrides<TOverrides extends StudyOverrides>(overrides: TOverrides): void;
 }
 export interface TimePoint {
 	time: number;
