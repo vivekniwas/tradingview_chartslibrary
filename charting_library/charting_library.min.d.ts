@@ -684,6 +684,134 @@ export interface RestBrokerMetaInfo {
 	url: string;
 	access_token: string;
 }
+export interface AccessListItem {
+	name: string;
+	grayed?: boolean;
+}
+export interface AccessList {
+	type: 'black' | 'white';
+	tools: AccessListItem[];
+}
+export interface NumericFormattingParams {
+	decimal_sign: string;
+}
+export declare type AvailableSaveloadVersions = '1.0' | '1.1';
+export interface Overrides {
+	[key: string]: string | number | boolean;
+}
+export interface WidgetBarParams {
+	details?: boolean;
+	watchlist?: boolean;
+	news?: boolean;
+	watchlist_settings?: {
+		default_symbols: string[];
+		readonly?: boolean;
+	};
+}
+export interface RssNewsFeedInfo {
+	url: string;
+	name: string;
+}
+export declare type RssNewsFeedItem = RssNewsFeedInfo | RssNewsFeedInfo[];
+export interface RssNewsFeedParams {
+	default: RssNewsFeedItem;
+	[symbolType: string]: RssNewsFeedItem;
+}
+export interface NewsProvider {
+	is_news_generic?: boolean;
+	get_news(symbol: string, callback: (items: NewsItem[]) => void): void;
+}
+export interface CustomFormatter {
+	format(date: Date): string;
+	formatLocal(date: Date): string;
+}
+export interface CustomFormatters {
+	timeFormatter: CustomFormatter;
+	dateFormatter: CustomFormatter;
+}
+export interface TimeFrameItem {
+	text: string;
+	resolution: ResolutionString;
+	description?: string;
+	title?: string;
+}
+export interface Favorites {
+	intervals: ResolutionString[];
+	chartTypes: string[];
+}
+export interface NewsItem {
+	fullDescription: string;
+	link?: string;
+	published: number;
+	shortDescription?: string;
+	source: string;
+	title: string;
+}
+export interface LoadingScreenOptions {
+	foregroundColor?: string;
+	backgroundColor?: string;
+}
+export interface InitialSettingsMap {
+	[key: string]: string;
+}
+export interface ISettingsAdapter {
+	initialSettings?: InitialSettingsMap;
+	setValue(key: string, value: string): void;
+	removeValue(key: string): void;
+}
+export declare type IBasicDataFeed = IDatafeedChartApi & IExternalDatafeed;
+export interface ChartingLibraryWidgetOptions {
+	container_id: string;
+	datafeed: IBasicDataFeed | (IBasicDataFeed & IDatafeedQuotesApi);
+	interval: ResolutionString;
+	symbol: string;
+	auto_save_delay?: number;
+	autosize?: boolean;
+	debug?: boolean;
+	disabled_features?: string[];
+	drawings_access?: AccessList;
+	enabled_features?: string[];
+	fullscreen?: boolean;
+	height?: number;
+	library_path?: string;
+	locale: LanguageCode;
+	numeric_formatting?: NumericFormattingParams;
+	saved_data?: object;
+	studies_access?: AccessList;
+	study_count_limit?: number;
+	symbol_search_request_delay?: number;
+	timeframe?: string;
+	timezone?: 'exchange' | Timezone;
+	toolbar_bg?: string;
+	width?: number;
+	charts_storage_url?: string;
+	charts_storage_api_version?: AvailableSaveloadVersions;
+	client_id?: string;
+	user_id?: string;
+	load_last_chart?: boolean;
+	studies_overrides: StudyOverrides;
+	customFormatters?: CustomFormatters;
+	overrides?: Overrides;
+	snapshot_url?: string;
+	indicators_file_name?: string;
+	preset?: 'mobile';
+	time_frames?: TimeFrameItem[];
+	custom_css_url?: string;
+	favorites?: Favorites;
+	save_load_adapter?: IExternalSaveLoadAdapter;
+	loading_screen?: LoadingScreenOptions;
+	settings_adapter?: ISettingsAdapter;
+}
+export interface TradingTerminalWidgetOptions extends ChartingLibraryWidgetOptions {
+	brokerConfig?: SingleBrokerMetaInfo;
+	restConfig?: RestBrokerMetaInfo;
+	widgetbar?: WidgetBarParams;
+	rss_news_feed?: RssNewsFeedParams;
+	news_provider?: NewsProvider;
+	brokerFactory?(host: IBrokerConnectionAdapterHost): IBrokerWithoutRealtime | IBrokerTerminal;
+}
+export declare type LayoutType = 's' | '2h' | '2-1' | '2v' | '3h' | '3v' | '3s' | '4' | '6' | '8';
+export declare type SupportedLineTools = 'text' | 'anchored_text' | 'note' | 'anchored_note' | 'double_curve' | 'arc' | 'icon' | 'arrow_up' | 'arrow_down' | 'arrow_left' | 'arrow_right' | 'price_label' | 'flag' | 'vertical_line' | 'horizontal_line' | 'horizontal_ray' | 'trend_line' | 'trend_angle' | 'arrow' | 'ray' | 'extended' | 'parallel_channel' | 'disjoint_angle' | 'flat_bottom' | 'pitchfork' | 'schiff_pitchfork_modified' | 'schiff_pitchfork' | 'balloon' | 'inside_pitchfork' | 'pitchfan' | 'gannbox' | 'gannbox_square' | 'gannbox_fan' | 'fib_retracement' | 'fib_trend_ext' | 'fib_speed_resist_fan' | 'fib_timezone' | 'fib_trend_time' | 'fib_circles' | 'fib_spiral' | 'fib_speed_resist_arcs' | 'fib_channel' | 'xabcd_pattern' | 'cypher_pattern' | 'abcd_pattern' | 'callout' | 'triangle_pattern' | '3divers_pattern' | 'head_and_shoulders' | 'fib_wedge' | 'elliott_impulse_wave' | 'elliott_triangle_wave' | 'elliott_triple_combo' | 'elliott_correction' | 'elliott_double_combo' | 'cyclic_lines' | 'time_cycles' | 'sine_line' | 'long_position' | 'short_position' | 'forecast' | 'date_range' | 'price_range' | 'date_and_price_range' | 'bars_pattern' | 'ghost_feed' | 'projection' | 'rectangle' | 'rotated_rectangle' | 'ellipse' | 'triangle' | 'polyline' | 'curve' | 'regression_trend' | 'cursor' | 'dot' | 'arrow_cursor' | 'eraser' | 'measure' | 'zoom' | 'brush';
 export interface IOrderLineAdapter {
 	remove(): void;
 	onModify(callback: () => void): this;
@@ -922,15 +1050,11 @@ export interface SymbolExt {
 export interface CreateTradingPrimitiveOptions {
 	disableUndo?: boolean;
 }
-/**
- * Time frame must have following format: `<integer><y|m|d>` (\d+(y|m|d) as Regex).
- */
-export declare type TimeFrame = string;
 export interface IChartWidgetApi {
 	onDataLoaded(): ISubscription<() => void>;
 	onSymbolChanged(): ISubscription<() => void>;
 	onIntervalChanged(): ISubscription<(interval: ResolutionString, timeFrameParameters: {
-		timeframe?: TimeFrame;
+		timeframe?: string;
 	}) => void>;
 	dataReady(callback: () => void): boolean;
 	crossHairMoved(callback: (params: CrossHairMovedEventParams) => void): void;
@@ -971,134 +1095,6 @@ export interface IChartWidgetApi {
 	chartType(): SeriesStyle;
 	setTimezone(timezone: 'exchange' | Timezone): void;
 }
-export interface AccessListItem {
-	name: string;
-	grayed?: boolean;
-}
-export interface AccessList {
-	type: 'black' | 'white';
-	tools: AccessListItem[];
-}
-export interface NumericFormattingParams {
-	decimal_sign: string;
-}
-export declare type AvailableSaveloadVersions = '1.0' | '1.1';
-export interface Overrides {
-	[key: string]: string | number | boolean;
-}
-export interface WidgetBarParams {
-	details?: boolean;
-	watchlist?: boolean;
-	news?: boolean;
-	watchlist_settings?: {
-		default_symbols: string[];
-		readonly?: boolean;
-	};
-}
-export interface RssNewsFeedInfo {
-	url: string;
-	name: string;
-}
-export declare type RssNewsFeedItem = RssNewsFeedInfo | RssNewsFeedInfo[];
-export interface RssNewsFeedParams {
-	default: RssNewsFeedItem;
-	[symbolType: string]: RssNewsFeedItem;
-}
-export interface NewsProvider {
-	is_news_generic?: boolean;
-	get_news(symbol: string, callback: (items: NewsItem[]) => void): void;
-}
-export interface CustomFormatter {
-	format(date: Date): string;
-	formatLocal(date: Date): string;
-}
-export interface CustomFormatters {
-	timeFormatter: CustomFormatter;
-	dateFormatter: CustomFormatter;
-}
-export interface TimeFrameItem {
-	text: TimeFrame;
-	resolution: ResolutionString;
-	description?: string;
-	title?: string;
-}
-export interface Favorites {
-	intervals: ResolutionString[];
-	chartTypes: string[];
-}
-export interface NewsItem {
-	fullDescription: string;
-	link?: string;
-	published: number;
-	shortDescription?: string;
-	source: string;
-	title: string;
-}
-export interface LoadingScreenOptions {
-	foregroundColor?: string;
-	backgroundColor?: string;
-}
-export interface InitialSettingsMap {
-	[key: string]: string;
-}
-export interface ISettingsAdapter {
-	initialSettings?: InitialSettingsMap;
-	setValue(key: string, value: string): void;
-	removeValue(key: string): void;
-}
-export declare type IBasicDataFeed = IDatafeedChartApi & IExternalDatafeed;
-export interface ChartingLibraryWidgetOptions {
-	container_id: string;
-	datafeed: IBasicDataFeed | (IBasicDataFeed & IDatafeedQuotesApi);
-	interval: ResolutionString;
-	symbol: string;
-	auto_save_delay?: number;
-	autosize?: boolean;
-	debug?: boolean;
-	disabled_features?: string[];
-	drawings_access?: AccessList;
-	enabled_features?: string[];
-	fullscreen?: boolean;
-	height?: number;
-	library_path?: string;
-	locale: LanguageCode;
-	numeric_formatting?: NumericFormattingParams;
-	saved_data?: object;
-	studies_access?: AccessList;
-	study_count_limit?: number;
-	symbol_search_request_delay?: number;
-	timeframe?: TimeFrame;
-	timezone?: 'exchange' | Timezone;
-	toolbar_bg?: string;
-	width?: number;
-	charts_storage_url?: string;
-	charts_storage_api_version?: AvailableSaveloadVersions;
-	client_id?: string;
-	user_id?: string;
-	load_last_chart?: boolean;
-	studies_overrides: StudyOverrides;
-	customFormatters?: CustomFormatters;
-	overrides?: Overrides;
-	snapshot_url?: string;
-	indicators_file_name?: string;
-	preset?: 'mobile';
-	time_frames?: TimeFrameItem[];
-	custom_css_url?: string;
-	favorites?: Favorites;
-	save_load_adapter?: IExternalSaveLoadAdapter;
-	loading_screen?: LoadingScreenOptions;
-	settings_adapter?: ISettingsAdapter;
-}
-export interface TradingTerminalWidgetOptions extends ChartingLibraryWidgetOptions {
-	brokerConfig?: SingleBrokerMetaInfo;
-	restConfig?: RestBrokerMetaInfo;
-	widgetbar?: WidgetBarParams;
-	rss_news_feed?: RssNewsFeedParams;
-	news_provider?: NewsProvider;
-	brokerFactory?(host: IBrokerConnectionAdapterHost): IBrokerWithoutRealtime | IBrokerTerminal;
-}
-export declare type AvailableLayouts = 's' | '2h' | '2-1' | '2v' | '3h' | '3v' | '3s' | '4' | '6' | '8';
-export declare type SupportedLineTools = 'text' | 'anchored_text' | 'note' | 'anchored_note' | 'double_curve' | 'arc' | 'icon' | 'arrow_up' | 'arrow_down' | 'arrow_left' | 'arrow_right' | 'price_label' | 'flag' | 'vertical_line' | 'horizontal_line' | 'horizontal_ray' | 'trend_line' | 'trend_angle' | 'arrow' | 'ray' | 'extended' | 'parallel_channel' | 'disjoint_angle' | 'flat_bottom' | 'pitchfork' | 'schiff_pitchfork_modified' | 'schiff_pitchfork' | 'balloon' | 'inside_pitchfork' | 'pitchfan' | 'gannbox' | 'gannbox_square' | 'gannbox_fan' | 'fib_retracement' | 'fib_trend_ext' | 'fib_speed_resist_fan' | 'fib_timezone' | 'fib_trend_time' | 'fib_circles' | 'fib_spiral' | 'fib_speed_resist_arcs' | 'fib_channel' | 'xabcd_pattern' | 'cypher_pattern' | 'abcd_pattern' | 'callout' | 'triangle_pattern' | '3divers_pattern' | 'head_and_shoulders' | 'fib_wedge' | 'elliott_impulse_wave' | 'elliott_triangle_wave' | 'elliott_triple_combo' | 'elliott_correction' | 'elliott_double_combo' | 'cyclic_lines' | 'time_cycles' | 'sine_line' | 'long_position' | 'short_position' | 'forecast' | 'date_range' | 'price_range' | 'date_and_price_range' | 'bars_pattern' | 'ghost_feed' | 'projection' | 'rectangle' | 'rotated_rectangle' | 'ellipse' | 'triangle' | 'polyline' | 'curve' | 'regression_trend' | 'cursor' | 'dot' | 'arrow_cursor' | 'eraser' | 'measure' | 'zoom' | 'brush';
 export declare type EditObjectDialogObjectType = 'mainSeries' | 'drawing' | 'study' | 'other';
 export interface EditObjectDialogEventParams {
 	objectType: EditObjectDialogObjectType;
@@ -1139,7 +1135,7 @@ export interface SubscribeEventsMap {
 	onMarkClick: (markId: Mark['id']) => void;
 	onTimescaleMarkClick: (markId: TimescaleMark['id']) => void;
 	onSelectedLineToolChanged: EmptyCallback;
-	layout_about_to_be_changed: (newLayoutType: AvailableLayouts) => void;
+	layout_about_to_be_changed: (newLayoutType: LayoutType) => void;
 	layout_changed: EmptyCallback;
 	activeChartChanged: (chartIndex: number) => void;
 }
@@ -1216,8 +1212,8 @@ export interface IChartingLibraryWidget {
 	watchList(): WatchListApi;
 	activeChart(): IChartWidgetApi;
 	chartsCount(): number;
-	layout(): AvailableLayouts;
-	setLayout(layout: AvailableLayouts): void;
+	layout(): LayoutType;
+	setLayout(layout: LayoutType): void;
 }
 export interface ChartingLibraryWidgetConstructor {
 	new (options: ChartingLibraryWidgetOptions | TradingTerminalWidgetOptions): IChartingLibraryWidget;
