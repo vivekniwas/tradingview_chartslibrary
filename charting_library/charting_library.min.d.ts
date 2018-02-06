@@ -227,10 +227,15 @@ export interface AccountManagerColumn {
 	notHideable?: boolean;
 	hideByDefault?: boolean;
 }
+export interface SortingParameters {
+	columnId: string;
+	asc?: boolean;
+}
 export interface AccountManagerTable {
 	id: string;
 	title?: string;
 	columns: AccountManagerColumn[];
+	initialSorting?: SortingParameters;
 	changeDelegate: IDelegate<(data: object) => void>;
 	getData(): Promise<object[]>;
 }
@@ -672,7 +677,7 @@ export interface StudyTemplateData {
 }
 export interface IExternalSaveLoadAdapter {
 	getAllCharts(): Promise<ChartMetaInfo[]>;
-	removeChart(chartId: number): Promise<void>;
+	removeChart(chartId: string): Promise<void>;
 	saveChart(chartData: ChartData): Promise<string>;
 	getChartContent(chartId: string): Promise<string>;
 	getAllStudyTemplates(): Promise<StudyTemplateMetaInfo[]>;
