@@ -794,7 +794,7 @@ export interface ChartingLibraryWidgetOptions {
 	client_id?: string;
 	user_id?: string;
 	load_last_chart?: boolean;
-	studies_overrides: StudyOverrides;
+	studies_overrides?: StudyOverrides;
 	customFormatters?: CustomFormatters;
 	overrides?: Overrides;
 	snapshot_url?: string;
