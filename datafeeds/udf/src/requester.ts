@@ -1,9 +1,9 @@
 import { RequestParams, UdfResponse, UdfErrorResponse, logMessage } from './helpers';
 
 export class Requester {
-	private _headers: object | undefined;
+	private _headers: HeadersInit | undefined;
 
-	public constructor(headers?: object) {
+	public constructor(headers?: HeadersInit) {
 		if (headers) {
 			this._headers = headers;
 		}
