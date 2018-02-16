@@ -25,7 +25,9 @@ export class Requester {
 
 		logMessage('New request: ' + urlPath);
 
-		const options: RequestInit = {};
+		// Send user cookies if the URL is on the same origin as the calling script.
+		const options: RequestInit = { credentials: 'same-origin' };
+
 		if (this._headers !== undefined) {
 			options.headers = this._headers;
 		}

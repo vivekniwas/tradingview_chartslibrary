@@ -16,7 +16,8 @@ var Requester = /** @class */ (function () {
             }).join('&');
         }
         logMessage('New request: ' + urlPath);
-        var options = {};
+        // Send user cookies if the URL is on the same origin as the calling script.
+        var options = { credentials: 'same-origin' };
         if (this._headers !== undefined) {
             options.headers = this._headers;
         }
