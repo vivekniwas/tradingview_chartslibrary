@@ -1062,7 +1062,7 @@ export interface VisiblePriceRange {
 	from: number;
 	to: number;
 }
-export declare type ChartActionId = 'chartProperties' | 'compareOrAdd' | 'scalesProperties' | 'tmzProperties' | 'paneObjectTree' | 'insertIndicator' | 'symbolSearch' | 'changeInterval' | 'timeScaleReset' | 'chartReset' | 'seriesHide' | 'studyHide' | 'lineToggleLock' | 'lineHide' | 'showLeftAxis' | 'showRightAxis' | 'scaleSeriesOnly' | 'drawingToolbarAction' | 'magnetAction' | 'stayInDrawingModeAction' | 'lockDrawingsAction' | 'hideAllDrawingsAction' | 'hideAllMarks' | 'showCountdown' | 'showSeriesLastValue' | 'showSymbolLabelsAction' | 'showStudyLastValue' | 'showStudyPlotNamesAction' | 'undo' | 'redo' | 'paneRemoveAllStudiesDrawingTools';
+export declare type ChartActionId = 'chartProperties' | 'compareOrAdd' | 'scalesProperties' | 'tmzProperties' | 'paneObjectTree' | 'insertIndicator' | 'symbolSearch' | 'changeInterval' | 'timeScaleReset' | 'chartReset' | 'seriesHide' | 'studyHide' | 'lineToggleLock' | 'lineHide' | 'showLeftAxis' | 'showRightAxis' | 'scaleSeriesOnly' | 'drawingToolbarAction' | 'magnetAction' | 'stayInDrawingModeAction' | 'hideAllDrawingsAction' | 'hideAllMarks' | 'showCountdown' | 'showSeriesLastValue' | 'showSymbolLabelsAction' | 'showStudyLastValue' | 'showStudyPlotNamesAction' | 'undo' | 'redo' | 'paneRemoveAllStudiesDrawingTools';
 export declare const enum SeriesStyle {
 	Bars = 0,
 	Candles = 1,
@@ -1297,6 +1297,7 @@ export interface IChartingLibraryWidget {
 	layout(): LayoutType;
 	setLayout(layout: LayoutType): void;
 	takeScreenshot(): void;
+	lockAllDrawingTools(): IWatchedValue<boolean>;
 }
 export interface ChartingLibraryWidgetConstructor {
 	new (options: ChartingLibraryWidgetOptions | TradingTerminalWidgetOptions): IChartingLibraryWidget;
