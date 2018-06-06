@@ -91,13 +91,13 @@ var DataPulseProvider = /** @class */ (function () {
 export { DataPulseProvider };
 function periodLengthSeconds(resolution, requiredPeriodsCount) {
     var daysCount = 0;
-    if (resolution === 'D') {
+    if (resolution === 'D' || resolution === '1D') {
         daysCount = requiredPeriodsCount;
     }
-    else if (resolution === 'M') {
+    else if (resolution === 'M' || resolution === '1M') {
         daysCount = 31 * requiredPeriodsCount;
     }
-    else if (resolution === 'W') {
+    else if (resolution === 'W' || resolution === '1W') {
         daysCount = 7 * requiredPeriodsCount;
     }
     else {
