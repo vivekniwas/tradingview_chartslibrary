@@ -1008,6 +1008,7 @@ export interface StudyInputValueItem {
 	id: StudyInputId;
 	value: StudyInputValueType;
 }
+export declare type StudyPriceScale = 'left' | 'right' | 'no-scale' | 'as-series';
 export interface IStudyApi {
 	isUserEditEnabled(): boolean;
 	setUserEditEnabled(enabled: boolean): void;
@@ -1018,6 +1019,7 @@ export interface IStudyApi {
 	mergeDown(): void;
 	unmergeUp(): void;
 	unmergeDown(): void;
+	changePriceScale(newPriceScale: StudyPriceScale): void;
 	isVisible(): boolean;
 	setVisible(visible: boolean): void;
 	bringToFront(): void;
@@ -1081,7 +1083,8 @@ export interface EntityInfo {
 	name: string;
 }
 export interface CreateStudyOptions {
-	checkLimit: boolean;
+	checkLimit?: boolean;
+	priceScale?: StudyPriceScale;
 }
 export interface CreateShapeOptions<TOverrides extends object> {
 	shape?: 'arrow_up' | 'arrow_down' | 'flag' | 'vertical_line' | 'horizontal_line';
