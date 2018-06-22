@@ -1052,6 +1052,21 @@ export interface ILineDataSourceApi {
 	getPoints(): PricedPoint[];
 	setPoints(points: ShapePoint[]): void;
 }
+export declare const enum PriceScaleMode {
+	Normal = 0,
+	Log = 1,
+	Percentage = 2,
+}
+export interface IPriceScaleApi {
+	getMode(): PriceScaleMode;
+	setMode(newMode: PriceScaleMode): void;
+}
+export interface IPaneApi {
+	hasMainSeries(): boolean;
+	getLeftPriceScale(): IPriceScaleApi;
+	getRightPriceScale(): IPriceScaleApi;
+	getMainSourcePriceScale(): IPriceScaleApi | null;
+}
 export interface CrossHairMovedEventParams {
 	time: number;
 	price: number;
@@ -1154,6 +1169,7 @@ export interface IChartWidgetApi {
 	priceFormatter(): IFormatter;
 	chartType(): SeriesStyle;
 	setTimezone(timezone: 'exchange' | Timezone): void;
+	getPanes(): IPaneApi[];
 }
 export interface WatchListSymbolList extends WatchListSymbolListData {
 	id: string;
