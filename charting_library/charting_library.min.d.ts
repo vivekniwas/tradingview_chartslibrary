@@ -324,6 +324,8 @@ export interface BrokerConfigFlags {
 	supportMarketBrackets?: boolean;
 	supportSymbolSearch?: boolean;
 	supportModifyDuration?: boolean;
+	supportModifyOrder?: boolean;
+	calculatePLUsingLast?: boolean;
 	requiresFIFOCloseTrades?: boolean;
 	supportBottomWidget?: boolean;
 	/**
